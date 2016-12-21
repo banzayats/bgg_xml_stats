@@ -24,22 +24,25 @@ while not end:
         date = play.attrib['date']
         location = play.attrib['location']
         name = play[0].attrib['name'].encode("utf-8")
+        players = len(play.find('players').findall('player'))
         if name in summary.keys():
             summary[name] += int(length)
         else:
             summary[name] = int(length)
-        result.append([name, length, date, location])
+        result.append([name, length, date, location, players])
     page += 1
 
 sorted_summary = sorted(summary.items(), key=operator.itemgetter(1))
 
 with open('result.csv', 'wb') as f:
     wr = csv.writer(f)
+    wr.writerow(["Game title", "Length", "Date", "Location", "Players"])
     for row in result:
         wr.writerow(row)
 
 with open('summary.csv', 'wb') as f:
     wr = csv.writer(f)
+    wr.writerow(["Game title", "Plays"])
     for row in sorted_summary:
        wr.writerow(row)
 
